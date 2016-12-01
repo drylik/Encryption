@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class EncryptionTests {
+public class IDEATests {
 
     private static final byte[] key = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
     private static final byte[] data16Bytes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
@@ -24,28 +24,28 @@ public class EncryptionTests {
 
     @Test
     public void encrypt16BytesIdeaTest() throws IOException {
-        ByteArrayInputStream key = new ByteArrayInputStream(EncryptionTests.key);
+        ByteArrayInputStream key = new ByteArrayInputStream(IDEATests.key);
         CipherAlg idea = new Idea(key);
-        ByteArrayInputStream data = new ByteArrayInputStream(EncryptionTests.data16Bytes);
+        ByteArrayInputStream data = new ByteArrayInputStream(IDEATests.data16Bytes);
         ByteArrayOutputStream newData = new ByteArrayOutputStream();
         idea.encrypt(data, newData);
 
         byte[] buffer = newData.toByteArray();
-        Assert.assertArrayEquals(EncryptionTests.encryptedData16Bytes, buffer);
+        Assert.assertArrayEquals(IDEATests.encryptedData16Bytes, buffer);
         data = new ByteArrayInputStream(buffer);
 
         ByteArrayOutputStream oldData = new ByteArrayOutputStream();
         idea.decrypt(data, oldData);
 
         buffer = oldData.toByteArray();
-        Assert.assertArrayEquals(EncryptionTests.data16Bytes, buffer);
+        Assert.assertArrayEquals(IDEATests.data16Bytes, buffer);
     }
 
     @Test
     public void encrypt14BytesIdeaTest() throws IOException {
-        ByteArrayInputStream key = new ByteArrayInputStream(EncryptionTests.key);
+        ByteArrayInputStream key = new ByteArrayInputStream(IDEATests.key);
         CipherAlg idea = new Idea(key);
-        ByteArrayInputStream data = new ByteArrayInputStream(EncryptionTests.data14Bytes);
+        ByteArrayInputStream data = new ByteArrayInputStream(IDEATests.data14Bytes);
         ByteArrayOutputStream newData = new ByteArrayOutputStream();
         idea.encrypt(data, newData);
 
@@ -56,33 +56,33 @@ public class EncryptionTests {
         idea.decrypt(data, oldData);
 
         buffer = oldData.toByteArray();
-        Assert.assertArrayEquals(EncryptionTests.data14Bytes, buffer);
+        Assert.assertArrayEquals(IDEATests.data14Bytes, buffer);
     }
 
     @Test
     public void encrypt16BytesStringIdeaTest() throws IOException {
         InputStream key = IOUtils.toInputStream(stringKey, StandardCharsets.UTF_8);
         CipherAlg idea = new Idea(key);
-        InputStream data = IOUtils.toInputStream(EncryptionTests.message16Bytes, StandardCharsets.UTF_8);
+        InputStream data = IOUtils.toInputStream(IDEATests.message16Bytes, StandardCharsets.UTF_8);
         ByteArrayOutputStream newData = new ByteArrayOutputStream();
         idea.encrypt(data, newData);
 
         byte[] buffer = newData.toByteArray();
-        Assert.assertArrayEquals(EncryptionTests.encryptedString16Bytes, buffer);
+        Assert.assertArrayEquals(IDEATests.encryptedString16Bytes, buffer);
         data = new ByteArrayInputStream(buffer);
 
         ByteArrayOutputStream oldData = new ByteArrayOutputStream();
         idea.decrypt(data, oldData);
 
-        Assert.assertArrayEquals(EncryptionTests.message16Bytes.getBytes(), oldData.toByteArray());
-        Assert.assertEquals(EncryptionTests.message16Bytes, oldData.toString());
+        Assert.assertArrayEquals(IDEATests.message16Bytes.getBytes(), oldData.toByteArray());
+        Assert.assertEquals(IDEATests.message16Bytes, oldData.toString());
     }
 
     @Test
     public void encrypt31BytesStringIdeaTest() throws IOException {
         InputStream key = IOUtils.toInputStream(stringKey, StandardCharsets.UTF_8);
         CipherAlg idea = new Idea(key);
-        InputStream data = IOUtils.toInputStream(EncryptionTests.message31Bytes, StandardCharsets.UTF_8);
+        InputStream data = IOUtils.toInputStream(IDEATests.message31Bytes, StandardCharsets.UTF_8);
         ByteArrayOutputStream newData = new ByteArrayOutputStream();
         idea.encrypt(data, newData);
 
@@ -92,41 +92,7 @@ public class EncryptionTests {
         ByteArrayOutputStream oldData = new ByteArrayOutputStream();
         idea.decrypt(data, oldData);
 
-        Assert.assertArrayEquals(EncryptionTests.message31Bytes.getBytes(), oldData.toByteArray());
-        Assert.assertEquals(EncryptionTests.message31Bytes, oldData.toString());
-    }
-
-    @Test
-    public void encrypt16BytesRSATest() throws IOException {
-        CipherAlg rsa = new RSA();
-        ByteArrayInputStream data = new ByteArrayInputStream(EncryptionTests.data16Bytes);
-        ByteArrayOutputStream newData = new ByteArrayOutputStream();
-        rsa.encrypt(data, newData);
-
-        byte[] buffer = newData.toByteArray();
-        data = new ByteArrayInputStream(buffer);
-
-        ByteArrayOutputStream oldData = new ByteArrayOutputStream();
-        rsa.decrypt(data, oldData);
-
-        buffer = oldData.toByteArray();
-        Assert.assertArrayEquals(EncryptionTests.data16Bytes, buffer);
-    }
-
-    @Test
-    public void encrypt31BytesStringRSATest() throws IOException {
-        CipherAlg rsa = new RSA();
-        InputStream data = IOUtils.toInputStream(EncryptionTests.message31Bytes, StandardCharsets.UTF_8);
-        ByteArrayOutputStream newData = new ByteArrayOutputStream();
-        rsa.encrypt(data, newData);
-
-        byte[] buffer = newData.toByteArray();
-        data = new ByteArrayInputStream(buffer);
-
-        ByteArrayOutputStream oldData = new ByteArrayOutputStream();
-        rsa.decrypt(data, oldData);
-
-        Assert.assertArrayEquals(EncryptionTests.message31Bytes.getBytes(), oldData.toByteArray());
-        Assert.assertEquals(EncryptionTests.message31Bytes, oldData.toString());
+        Assert.assertArrayEquals(IDEATests.message31Bytes.getBytes(), oldData.toByteArray());
+        Assert.assertEquals(IDEATests.message31Bytes, oldData.toString());
     }
 }
