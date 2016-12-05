@@ -4,11 +4,8 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-/**
- * Created by Андрей on 28.11.2016.
- */
 public class RSA implements CipherAlg {
-    private static final String FILE_NAME = "private.dat";
+    private static final String DEFAULT_FILE_NAME = "private.dat";
 
     /**
      * {e, n} - public key
@@ -39,13 +36,17 @@ public class RSA implements CipherAlg {
         generateKeys();
     }
 
+    public BigInteger getD() {
+        return d;
+    }
+
     /**
-     * for someone's else public key
+     * for someone's else public and private keys
      */
-    public RSA(BigInteger e, BigInteger n) throws Exception {
+    public RSA(BigInteger e, BigInteger n, String filename) throws Exception {
         this.e = e;
         this.n = n;
-        File file = new File(FILE_NAME);
+        File file = new File(filename);
         if (!file.exists()) {
             throw new Exception("No private key found");
         }
@@ -53,7 +54,7 @@ public class RSA implements CipherAlg {
         byte[] buffer = new byte[fin.available()];
         fin.read(buffer);
         if (!n.equals(new BigInteger(new String(buffer).split(" ")[1]))) {
-            throw new Exception("Private and public keys doesn't fit each other");
+            throw new Exception("Private and public keys don't fit each other");
         }
         d = new BigInteger(new String(buffer).split(" ")[0]);
         fin.close();
@@ -77,14 +78,14 @@ public class RSA implements CipherAlg {
         }
         d = e.modInverse(f);
         //saving private key
-        File file = new File(FILE_NAME);
+        File file = new File(DEFAULT_FILE_NAME);
         if (file.exists()) {
             file.delete();
         }
         file.createNewFile();
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(d.toByteArray());
-        fos.write(" ".getBytes());
+        fos.write(0);
         fos.write(n.toByteArray());
         fos.close();
     }
