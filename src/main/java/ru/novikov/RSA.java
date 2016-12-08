@@ -53,10 +53,23 @@ public class RSA implements CipherAlg {
         FileInputStream fin = new FileInputStream(file);
         byte[] buffer = new byte[fin.available()];
         fin.read(buffer);
-        if (!n.equals(new BigInteger(new String(buffer).split(" ")[1]))) {
+        int zeroBytePos;
+        for (zeroBytePos = 0; zeroBytePos < buffer.length; zeroBytePos++) {
+            if (buffer[zeroBytePos] == 0) {
+                break;
+            }
+        }
+        if (zeroBytePos == buffer.length) {
+            throw new Exception("d and n was not detected in the file.");
+        }
+        byte[] nBytes = new byte[buffer.length - zeroBytePos - 1];
+        System.arraycopy(buffer, zeroBytePos + 1, nBytes, 0, nBytes.length);
+        if (!n.equals(new BigInteger(nBytes))) {
             throw new Exception("Private and public keys don't fit each other");
         }
-        d = new BigInteger(new String(buffer).split(" ")[0]);
+        byte[] dBytes = new byte[zeroBytePos];
+        System.arraycopy(buffer, 0, dBytes, 0, dBytes.length);
+        d = new BigInteger(dBytes);
         fin.close();
     }
 
