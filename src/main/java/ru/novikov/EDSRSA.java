@@ -3,18 +3,14 @@ package ru.novikov;
 import java.io.*;
 import java.math.BigInteger;
 
-public class EDSRSA {
-
-    private static final String DEFAULT_FILE_NAME = "private.dat";
-    private BigInteger e;
-    private BigInteger n;
-    private BigInteger d;
+public class EDSRSA extends RSA {
 
     public EDSRSA() throws Exception {
-        RSA rsa = new RSA();
-        e = rsa.getE();
-        n = rsa.getN();
-        d = rsa.getD();
+        super();
+    }
+
+    public EDSRSA(BigInteger e, BigInteger n, String filename) throws Exception {
+        super(e, n, filename);
     }
 
     public void sign(InputStream in, OutputStream out) throws IOException {

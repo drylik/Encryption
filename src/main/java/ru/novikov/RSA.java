@@ -5,15 +5,15 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 public class RSA implements CipherAlg {
-    private static final String DEFAULT_FILE_NAME = "private.dat";
+    protected static final String DEFAULT_FILE_NAME = "private.dat";
 
     /**
      * {e, n} - public key
      * {d, n} - private key
      */
-    private BigInteger n;
-    private BigInteger e;
-    private BigInteger d;
+    protected BigInteger n;
+    protected BigInteger e;
+    protected BigInteger d;
 
     public BigInteger getN() {
         return n;
