@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 public class RSA implements CipherAlg {
-    protected static final String DEFAULT_FILE_NAME = "private.dat";
+    protected String filename = "private.dat";
 
     /**
      * {e, n} - public key
@@ -36,6 +36,11 @@ public class RSA implements CipherAlg {
         generateKeys();
     }
 
+    public RSA(String filename) throws IOException {
+        this.filename = filename;
+        generateKeys();
+    }
+
     public BigInteger getD() {
         return d;
     }
@@ -53,6 +58,7 @@ public class RSA implements CipherAlg {
         FileInputStream fin = new FileInputStream(file);
         byte[] buffer = new byte[fin.available()];
         fin.read(buffer);
+        fin.close();
         int zeroBytePos;
         for (zeroBytePos = 0; zeroBytePos < buffer.length; zeroBytePos++) {
             if (buffer[zeroBytePos] == 0) {
@@ -70,7 +76,6 @@ public class RSA implements CipherAlg {
         byte[] dBytes = new byte[zeroBytePos];
         System.arraycopy(buffer, 0, dBytes, 0, dBytes.length);
         d = new BigInteger(dBytes);
-        fin.close();
     }
 
     public RSA(int bitLength) throws IOException {
@@ -91,7 +96,7 @@ public class RSA implements CipherAlg {
         }
         d = e.modInverse(f);
         //saving private key
-        File file = new File(DEFAULT_FILE_NAME);
+        File file = new File(filename);
         if (file.exists()) {
             file.delete();
         }

@@ -13,6 +13,10 @@ public class EDSRSA extends RSA {
         super(e, n, filename);
     }
 
+    public EDSRSA(String filename) throws IOException {
+        super(filename);
+    }
+
     public void sign(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[in.available()];
         in.read(buffer);
